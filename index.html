@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certificat de Formation - Juristudes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="input-controls">
+        <div class="input-group">
+          <label for="recipient-name">Nom du bénéficiaire:</label>
+          <input type="text" id="recipient-name" placeholder="Ex: Claudine Michel" value="Claudine Michel">
+        </div>
+        <div class="input-group">
+          <label for="certificate-date">Date de certification:</label>
+          <input type="date" id="certificate-date" value="2025-10-02">
+        </div>
+        <div class="input-group">
+          <label for="course-name">Nom de la formation:</label>
+          <input type="text" id="course-name" value="Software Developer">
+        </div>
+        <button id="generate-pdf" class="btn">Télécharger en PDF</button>
+      </div>
+
+      <div id="certificate-container">
+        <div id="certificate" class="a4-landscape">
+          <div class="header">
+            <div class="logo-left">
+              <img src="img/LogoJuristides.png" alt="Logo Juristides" class="logo">
+            </div>
+            <div class="title">
+              <h1>CERTIFICAT</h1>
+              <h2>DE FORMATION</h2>
+            </div>
+            <div class="logo-right">
+              <img src="img/certificate.svg" alt="Certificat" class="trophy">
+            </div>
+          </div>
+
+          <div class="content">
+            <p class="attestation">Ce certificat atteste que</p>
+            <h2 id="fullname-display" class="recipient-name">Claudine Michel</h2>
+            <p class="description">
+              a réussi avec succès la formation <span class="underline" id="course-display">Software Developer</span>,
+              <br>dispensée en ligne sur la plateforme Juristudes,
+              <br>en démontrant une compréhension approfondie des concepts et des compétences enseignés.
+            </p>
+
+            <p class="congratulations">Félicitations pour les excellents résultats.</p>
+
+            <div class="signature-section">
+              <div class="location">
+                <p>Fait à Marrakech</p>
+                <p>le <span id="date-display">02/10/2025</span></p>
+              </div>
+              <div class="signature">
+                <img src="img/signature.png" alt="Signature" class="signature-img">
+                <p class="signatory">Lombi Mufuri Franklin</p>
+                <p class="position">CEO</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        line-height: 1.6;
+        padding: 20px;
+      }
+      
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      
+      .a4-landscape {
+        width: 29.7cm;
+        height: 21cm;
+        margin: 0 auto;
+        position: relative;
+        box-sizing: border-box;
+      }
+      
+      .input-controls {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: flex-end;
+      }
+      
+      .input-group {
+        flex: 1;
+        min-width: 200px;
+      }
+      
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        font-size: 14px;
+      }
+      
+      input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      
+      .btn {
+        background-color: #b8860b;
+        color: white;
+        border: none;
+        padding: 11px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s;
+      }
+      
+      .btn:hover {
+        background-color: #9a7209;
+      }
+      
+      #certificate-container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+      }
+      
+      #certificate {
+        background-color: #fff;
+        border: 2px solid #e0d8a8;
+        border-radius: 5px;
+        padding: 40px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23f0eed6' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+      }
+      
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 30px;
+      }
+      
+      .logo {
+        max-width: 120px;
+      }
+      
+      .trophy {
+        max-width: 100px;
+        opacity: 0.8;
+      }
+      
+      .title {
+        text-align: center;
+      }
+      
+      h1 {
+        font-family: 'Playfair Display', serif;
+        color: #b8860b;
+        font-size: 42px;
+        font-weight: 700;
+        letter-spacing: 5px;
+        margin: 0;
+      }
+      
+      h2 {
+        font-family: 'Playfair Display', serif;
+        color: #b8860b;
+        font-size: 24px;
+        font-weight: normal;
+        letter-spacing: 2px;
+        margin: 0;
+      }
+      
+      .content {
+        text-align: center;
+        padding: 0 20px;
+      }
+      
+      .attestation {
+        font-size: 18px;
+        margin: 30px 0 10px;
+      }
+      
+      .recipient-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 36px;
+        color: #333;
+        font-style: italic;
+        margin: 15px 0 30px;
+      }
+      
+      .description {
+        font-size: 16px;
+        line-height: 1.8;
+        margin: 0 auto;
+        max-width: 650px;
+      }
+      
+      .underline {
+        text-decoration: underline;
+        font-weight: 500;
+      }
+      
+      .congratulations {
+        font-weight: bold;
+        font-size: 18px;
+        margin: 30px 0;
+      }
+      
+      .signature-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-top: 50px;
+        position: relative;
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+      }
+      
+      .location {
+        text-align: left;
+        font-size: 16px;
+        flex: 1;
+      }
+      
+      .signature {
+        text-align: center;
+        flex: 1;
+        margin-right: 50px;
+      }
+      
+      .signature-img {
+        max-width: 150px;
+        margin-bottom: 10px;
+      }
+      
+      .signatory {
+        font-weight: 500;
+        margin: 0;
+      }
+      
+      .position {
+        font-size: 14px;
+      }
+      
+      @media print {
+        .input-controls {
+          display: none;
+        }
+        
+        #certificate-container {
+          box-shadow: none;
+          padding: 0;
+        }
+      }
+      
+      /* A4 page ratio and dimensions */
+      #certificate {
+        width: 210mm;
+        min-height: 148mm; /* A4 landscape */
+        max-height: 150mm;
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
+
+      @media (max-width: 768px) {
+        .header {
+          flex-direction: column;
+          gap: 20px;
+        }
+        
+        .signature-section {
+          flex-direction: column;
+          gap: 30px;
+          align-items: center;
+        }
+        
+        .location {
+          text-align: center;
+        }
+      }
+    </style>
+
+    <script>
+      // Get elements
+      const recipientNameInput = document.getElementById('recipient-name');
+      const certificateDateInput = document.getElementById('certificate-date');
+      const courseNameInput = document.getElementById('course-name');
+      const fullnameDisplay = document.getElementById('fullname-display');
+      const dateDisplay = document.getElementById('date-display');
+      const courseDisplay = document.getElementById('course-display');
+      const generatePdfBtn = document.getElementById('generate-pdf');
+      
+      // Format date for display (DD/MM/YYYY)
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('fr-FR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        });
+      }
+      
+      // Update certificate with input values
+      function updateCertificate() {
+        const name = recipientNameInput.value.trim() || 'Claudine Michel';
+        const courseValue = courseNameInput.value.trim() || 'Software Developer';
+        const dateValue = certificateDateInput.value;
+        
+        fullnameDisplay.textContent = name;
+        courseDisplay.textContent = courseValue;
+        
+        if (dateValue) {
+          dateDisplay.textContent = formatDate(dateValue);
+        }
+      }
+      
+      // Set initial values
+      updateCertificate();
+      
+      // Add event listeners to inputs
+      recipientNameInput.addEventListener('input', updateCertificate);
+      certificateDateInput.addEventListener('change', updateCertificate);
+      courseNameInput.addEventListener('input', updateCertificate);
+      
+      // Generate PDF
+      generatePdfBtn.addEventListener('click', function() {
+        // Show loading state
+        generatePdfBtn.textContent = 'Génération en cours...';
+        generatePdfBtn.disabled = true;
+        
+        const certificateElement = document.getElementById('certificate');
+        
+        // Use html2canvas to create an image of the certificate
+        html2canvas(certificateElement, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#ffffff',
+          height: certificateElement.offsetHeight,
+          width: certificateElement.offsetWidth,
+          windowHeight: certificateElement.offsetHeight + 100,
+          windowWidth: certificateElement.offsetWidth + 100,
+          logging: false,
+          onclone: function(clonedDoc) {
+            const clonedElement = clonedDoc.getElementById('certificate');
+            if (clonedElement) {
+              // Ensure all content is visible and sized properly in clone
+              clonedElement.style.height = 'auto';
+              clonedElement.style.overflow = 'visible';
+            }
+          }
+        }).then(canvas => {
+          // Create PDF using jsPDF
+          const { jsPDF } = window.jspdf;
+          
+          // A4 dimensions in landscape: width: 297mm (841.89pt), height: 210mm (595.28pt)
+          const pdf = new jsPDF('landscape', 'pt', 'a4');
+          
+          // Calculate dimensions to fit the entire certificate
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = pdf.internal.pageSize.getHeight();
+          const aspectRatio = canvas.width / canvas.height;
+          
+          // Set dimensions with safe margins
+          const imgWidth = pdfWidth - 40; // 20pt margin on each side
+          const imgHeight = imgWidth / aspectRatio;
+          
+          // Center the image on the page
+          const x = (pdfWidth - imgWidth) / 2;
+          const y = (pdfHeight - imgHeight) / 2;
+          
+          const imgData = canvas.toDataURL('image/jpeg', 1.0);
+          
+          // Add the image to the PDF
+          pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
+          
+          // Get recipient name for filename
+          const recipientName = recipientNameInput.value.trim().replace(/\s+/g, '_') || 'certificat';
+          pdf.save(`certificat_${recipientName}.pdf`);
+          
+          // Reset button state
+          generatePdfBtn.textContent = 'Télécharger en PDF';
+          generatePdfBtn.disabled = false;
+        });
+      });
+    </script>
+  </body>
+</html>
